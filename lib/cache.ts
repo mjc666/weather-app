@@ -4,10 +4,31 @@ import { Redis } from '@upstash/redis';
 const CACHE_PREFIX = 'weather-app:';
 
 // Initialize Redis client if environment variables are available
-const redis = process.env.REDIS_URL ? new Redis({
-  url: process.env.REDIS_URL!,
-  token: process.env.REDIS_TOKEN || '',
-}) : null;
+const getRedisClient = () => {
+  if (!process.env.REDIS_URL) return null;
+
+  try {
+    let url = process.env.REDIS_URL;
+    let token = process.env.REDIS_TOKEN || '';
+
+    // Handle redis:// protocol: convert to https and extract password if present
+    if (url.startsWith('redis://')) {
+      const parsed = new URL(url);
+      token = parsed.password || token;
+      url = `https://${parsed.hostname}:${parsed.port}`;
+    }
+
+    return new Redis({
+      url,
+      token,
+    });
+  } catch (e) {
+    console.error('Failed to initialize Redis client', e);
+    return null;
+  }
+};
+
+const redis = getRedisClient();
 
 // Local fallback cache
 const localCache = new NodeCache({ stdTTL: 600, checkperiod: 120 });
