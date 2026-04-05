@@ -11,7 +11,8 @@ export async function GET(request: Request) {
 
   // Check Cache
   const cacheKey = `weather:${q.toLowerCase()}`;
-  const cachedData = await getCache(cacheKey);
+  const rawCache = await getCache(cacheKey);
+  const cachedData = rawCache ? JSON.parse(rawCache as string) : null;
   if (cachedData) {
     return NextResponse.json(cachedData, {
       headers: { 'X-Cache': 'HIT', 'Cache-Control': 'public, s-maxage=600' }
