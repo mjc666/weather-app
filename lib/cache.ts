@@ -15,6 +15,12 @@ const getRedisClient = () => {
     if (url.startsWith('redis://')) {
       const parsed = new URL(url);
       token = parsed.password || token;
+      // Upstash REST API expects https://host:port
+      url = `https://${parsed.hostname}:${parsed.port}`;
+    } else if (url.startsWith('rediss://')) {
+      const parsed = new URL(url);
+      token = parsed.password || token;
+      // Upstash REST API expects https://host:port
       url = `https://${parsed.hostname}:${parsed.port}`;
     }
 
