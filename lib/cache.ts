@@ -4,9 +4,9 @@ import { Redis } from '@upstash/redis';
 const CACHE_PREFIX = 'weather-app:';
 
 // Initialize Redis client if environment variables are available
-const redis = process.env.UPSTASH_REDIS_REST_URL ? new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL!,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+const redis = process.env.REDIS_URL ? new Redis({
+  url: process.env.REDIS_URL!,
+  token: process.env.REDIS_TOKEN || '',
 }) : null;
 
 // Local fallback cache
