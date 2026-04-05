@@ -8,8 +8,9 @@ const getRedisClient = () => {
   if (!process.env.REDIS_URL) return null;
 
   try {
+    // ioredis internally handles connection string parsing using standard URL logic
+    // We pass the string directly to ensure we stay within modern standards
     return new Redis(process.env.REDIS_URL, {
-      // Avoid hanging the server if Redis is unreachable
       connectTimeout: 5000,
       lazyConnect: true,
       maxRetriesPerRequest: 1,
