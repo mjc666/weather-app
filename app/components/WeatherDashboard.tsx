@@ -41,9 +41,15 @@ export default function WeatherDashboard() {
 
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-8">
-      <header className="mb-8">
-        <h1 className="text-4xl font-extrabold text-gray-900 mb-6">Weather Dashboard</h1>
-        <div className="flex gap-2 max-w-sm">
+      <header className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+        <div>
+          <h1 className="text-4xl font-extrabold text-gray-900 flex items-center gap-3">
+            <img src="/icons/favicon.png" alt="Cloud Icon" className="w-10 h-10" />
+            The Weather App
+          </h1>
+          <p className="text-gray-500 text-sm mt-1 ml-13">Powered by OpenWeatherMap</p>
+        </div>
+        <div className="flex gap-2 w-full md:max-w-sm">
           <input 
             type="text" 
             value={city} 

@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { getCache, setCache } from '@/lib/cache';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -6,6 +7,15 @@ export async function GET(request: Request) {
 
   if (!q) {
     return NextResponse.json({ error: 'City name (q) is required' }, { status: 400 });
+  }
+
+  // Check Cache
+  const cacheKey = `weather:${q.toLowerCase()}`;
+  const cachedData = await getCache(cacheKey);
+  if (cachedData) {
+    return NextResponse.json(cachedData, {
+      headers: { 'X-Cache': 'HIT', 'Cache-Control': 'public, s-maxage=600' }
+    });
   }
 
   const apiKey = process.env.OPENWEATHER_API_KEY;
@@ -33,8 +43,12 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Failed to fetch weather data' }, { status: response.status });
     }
     const data = await response.json();
+    
+    // Store in cache
+    await setCache(cacheKey, data);
+    
     return NextResponse.json(data, {
-      headers: { 'Cache-Control': 'public, s-maxage=600, stale-while-revalidate=300' }
+      headers: { 'X-Cache': 'MISS', 'Cache-Control': 'public, s-maxage=600' }
     });
   } catch (error) {
     return NextResponse.json({ error: 'An unexpected error occurred' }, { status: 500 });

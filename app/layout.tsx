@@ -15,6 +15,10 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "The Weather App",
   description: "A personal weather dashboard",
+  icons: {
+    icon: '/icons/favicon.png',
+    apple: '/icons/apple-touch-icon.png',
+  },
 };
 
 export default function RootLayout({

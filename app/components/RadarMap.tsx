@@ -3,13 +3,13 @@
 import dynamic from 'next/dynamic';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useState } from 'react';
+import { useMap } from 'react-leaflet';
 
 // Dynamically import Leaflet components
 const MapContainer = dynamic(() => import('react-leaflet').then((m) => m.MapContainer), { ssr: false });
 const TileLayer = dynamic(() => import('react-leaflet').then((m) => m.TileLayer), { ssr: false });
 const Marker = dynamic(() => import('react-leaflet').then((m) => m.Marker), { ssr: false });
 const Popup = dynamic(() => import('react-leaflet').then((m) => m.Popup), { ssr: false });
-const useMap = dynamic(() => import('react-leaflet').then((m) => m.useMap), { ssr: false });
 
 const MapUpdater = ({ center }: { center: [number, number] }) => {
   const map = useMap();
@@ -22,7 +22,6 @@ const MapUpdater = ({ center }: { center: [number, number] }) => {
 };
 
 export default function RadarMap({ lat, lon, city }: { lat: number; lon: number; city: string }) {
-  const apiKey = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY;
   const [L, setLeaflet] = useState<any>(null);
 
   useEffect(() => {
@@ -44,7 +43,9 @@ export default function RadarMap({ lat, lon, city }: { lat: number; lon: number;
     <div className="h-64 w-full relative rounded-lg overflow-hidden flex flex-col">
       <div className="h-64 w-full flex-grow">
         <MapContainer center={[lat, lon]} zoom={8} className="h-64 w-full" scrollWheelZoom={false}>
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          <TileLayer 
+              url={`/api/tiles/map?z={z}&x={x}&y={y}`} 
+          />
           <TileLayer 
               url={`/api/radar?layer=precipitation_new&z={z}&x={x}&y={y}`} 
           />          
