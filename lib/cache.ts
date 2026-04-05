@@ -30,7 +30,17 @@ export const getCache = async (key: string) => {
   const prefixedKey = CACHE_PREFIX + key;
   if (redis) {
     try {
-      return await redis.get(prefixedKey);
+      const data = await redis.getBuffer(prefixedKey);
+      if (data) {
+        // Attempt to parse as JSON first (for weather data)
+        try {
+          return JSON.parse(data.toString());
+        } catch {
+          // If not JSON, return as Buffer (for images)
+          return data;
+        }
+      }
+      return null;
     } catch (e) {
       console.error('Redis get error', e);
       return null;
@@ -41,16 +51,16 @@ export const getCache = async (key: string) => {
 
 export const setCache = async (key: string, value: any, ttl?: number) => {
   const prefixedKey = CACHE_PREFIX + key;
-  
-  // Serialize complex objects/Buffers for Redis (as it stores strings/buffers)
-  const serializedValue = JSON.stringify(value);
 
   if (redis) {
     try {
+      // If it's a buffer (image), store as is. If object, serialize to JSON string.
+      const valToStore = Buffer.isBuffer(value) ? value : JSON.stringify(value);
+      
       if (ttl) {
-        await redis.set(prefixedKey, serializedValue, 'EX', ttl);
+        await redis.set(prefixedKey, valToStore, 'EX', ttl);
       } else {
-        await redis.set(prefixedKey, serializedValue);
+        await redis.set(prefixedKey, valToStore);
       }
     } catch (e) {
       console.error('Redis set error', e);
