@@ -79,6 +79,10 @@ export default function WeatherDashboard() {
                   <p>Wind: {Math.round(weather.current.wind_speed)} mph</p>
                   <p>Humidity: {weather.current.humidity}%</p>
                 </div>
+                <div className="flex gap-6 pt-2 text-sm font-semibold text-gray-700">
+                  <p>Sunrise: {new Date(weather.current.sunrise * 1000).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}</p>
+                  <p>Sunset: {new Date(weather.current.sunset * 1000).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}</p>
+                </div>
               </div>
             </section>
 
