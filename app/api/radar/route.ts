@@ -36,8 +36,8 @@ export async function GET(request: Request) {
     const buffer = await response.arrayBuffer();
     const data = Buffer.from(buffer);
 
-    // Store in cache
-    await setCache(cacheKey, data);
+    // Store in cache (600 seconds = 10 minutes)
+    await setCache(cacheKey, data, 600);
 
     return new NextResponse(data, {
       headers: { 
