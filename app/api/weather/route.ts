@@ -13,8 +13,13 @@ export async function GET(request: Request) {
   const cacheKey = `weather:${q.toLowerCase()}`;
   const cachedData = await getCache(cacheKey);
   if (cachedData) {
+    const isRedis = !!process.env.REDIS_URL;
     return NextResponse.json(cachedData, {
-      headers: { 'X-Cache': 'HIT', 'Cache-Control': 'public, s-maxage=600' }
+      headers: { 
+        'X-Cache': 'HIT', 
+        'X-Cache-Provider': isRedis ? 'Redis' : 'NodeCache',
+        'Cache-Control': 'public, s-maxage=600' 
+      }
     });
   }
 
