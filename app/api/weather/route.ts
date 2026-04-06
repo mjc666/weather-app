@@ -44,8 +44,8 @@ export async function GET(request: Request) {
     }
     const data = await response.json();
     
-    // Store in cache
-    await setCache(cacheKey, data);
+    // Store in cache (600 seconds = 10 minutes)
+    await setCache(cacheKey, data, 600);
     
     return NextResponse.json(data, {
       headers: { 'X-Cache': 'MISS', 'Cache-Control': 'public, s-maxage=600' }
