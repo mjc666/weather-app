@@ -29,6 +29,15 @@ export default function WeatherDashboard() {
     const savedCity = localStorage.getItem('lastCity') || 'New York';
     setCity(savedCity);
     fetchWeatherData(savedCity);
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        fetchWeatherData(savedCity);
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, []);
 
   const handleSearch = () => {
