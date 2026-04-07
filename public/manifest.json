@@ -1,5 +1,5 @@
 {
-  "name": "Weather Tracker",
+  "name": "The Weather App",
   "short_name": "Weather",
   "start_url": "/",
   "display": "standalone",
