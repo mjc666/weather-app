@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   description: "A personal weather dashboard",
   icons: {
     icon: '/icons/favicon.png',
-    apple: '/icons/apple-touch-icon.png',
+    apple: '/icons/apple-touch-icon-v2.png',
   },
   manifest: '/manifest.json',
   appleWebApp: {
