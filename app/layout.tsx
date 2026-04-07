@@ -19,6 +19,12 @@ export const metadata: Metadata = {
     icon: '/icons/favicon.png',
     apple: '/icons/apple-touch-icon.png',
   },
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    title: 'Weather App',
+    statusBarStyle: 'black-translucent',
+  },
 };
 
 export default function RootLayout({
